@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 typedef struct _PidState
 {
 	float u_1;
@@ -12,7 +14,7 @@ typedef struct _PidData
 {
 	float C;
 	float ALP0;
-	float BEAT0;
+	float BETA0;
 	float BETA1;
 }PidData;
 
@@ -32,7 +34,7 @@ void init(PidData* pd, PidState* ps, const Pid *p)
 
 	pd->C = (p->Kd + p->Kp*p->Tf)/p->Tf;
 	pd->ALP0 = -(p->Tc/p->Tf - 1);
-	pd->BEAT0 = -p->Kd*p->Tc/p->Tf/p->Tf;
+	pd->BETA0 = -p->Kd*p->Tc/p->Tf/p->Tf;
 	pd->BETA1 = p->Ki*p->Tf;
 }
 
@@ -42,7 +44,7 @@ float filt(const PidData* pd, PidState* ps, float u)
 	float yc, y0, y1;
 
 	yc = u*pd->C;
-	y0 = pd->ALP0*ps->y0_1 + pd->BEAT0*ps->u_1;
+	y0 = pd->ALP0*ps->y0_1 + pd->BETA0*ps->u_1;
 	y1 = ps->y1_1 + pd->BETA1*ps->u_1;
 
 	ps->u_1 = u;
