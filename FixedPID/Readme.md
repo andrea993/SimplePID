@@ -83,8 +83,8 @@ while(!end)
 {
 	u = pidStep(&mypid, &arg);
 	SetProcessInput(u);
-	sleep(T);
 	end = checkEnd();
+	sleep(T);
 }
 ```
 `pidStep()` returns the PID output, that will be the process input, in typical usecase.
