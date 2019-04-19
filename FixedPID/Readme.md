@@ -15,7 +15,7 @@ This PID use the engineering configuration where all parameter are function of `
 |     T     	|       Sampling time       	|   SR=1/T , T=1/SR   	| Look your ADC 	|
 |     Tw    	| Anti-windup time constant 	|       Tw , Tw       	|      Ti/5     	|
 |   Ulim[0] 	|       Min output           	|          -   	        |Min process input|
-|   Ulim[0] 	|       Max output           	|          -   	        |Max process input|
+|   Ulim[1] 	|       Max output           	|          -   	        |Max process input|
 
 ### Inputs
 This PID has 3 inputs:
