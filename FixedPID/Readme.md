@@ -83,6 +83,7 @@ while(!end)
 {
 	u = pidStep(&mypid, &arg);
 	SetProcessInput(u);
+	sleep(T);
 	end = checkEnd();
 }
 ```
