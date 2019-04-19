@@ -11,6 +11,7 @@ typedef struct _PID
 	int32_t Ulim[2];
 	int32_t X[2];
 	int32_t wo;
+	void(*finput)(int32_t U[3], int32_t wo, void* arg);
 }PID;
 
 typedef struct _InitParameters
@@ -23,11 +24,12 @@ typedef struct _InitParameters
 	float Tw;
 	float Ulim[2];
 	bool realDerivative;
+	void(*finput)(int32_t U[3], int32_t wo, void* arg);
 }InitParameters;
 
 void pidInit(PID* pid, const InitParameters* p);
 
-int32_t pidStep(PID* pid, void(*finput)(int32_t U[3], int32_t wo, void* arg), void* arg);
+int32_t pidStep(PID* pid, void* arg);
 
 int value2int(int32_t x)
 {

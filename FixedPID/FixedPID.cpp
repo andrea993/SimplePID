@@ -48,6 +48,7 @@ int main()
 	mypars.Ulim[0] = -1;
 	mypars.Ulim[1] = 1;
 	mypars.realDerivative = false;
+	mypars.finput = loopInput;
 	
 	pidInit(&mypid, &mypars);
 
@@ -58,7 +59,7 @@ int main()
 		
 	for (int32_t i = 0; i < 200000; i++)
 	{
-		u = pidStep(&mypid, loopInput, &arg);
+		u = pidStep(&mypid, &arg);
 		arg.Yold = u;
 		
 	}
@@ -93,12 +94,14 @@ void pidInit(PID* pid, const InitParameters* p)
 	pid->X[0] = pid->X[1] = 0;
 
 	pid->wo = 0;
+
+	pid->finput = p->finput;
 }
 
-int32_t pidStep(PID* pid, void (*finput)(int32_t U[3], int32_t wo ,void* arg), void* arg)
+int32_t pidStep(PID* pid, void* arg)
 {
 	int32_t U[3];
-	(*finput)(U, pid->wo, arg);
+	(*pid->finput)(U, pid->wo, arg);
 
 	pid->X[0] += valuemul(U[1], pid->C[2]) + valuemul(U[0], pid->C[1]);
 	pid->X[1] = valuemul(U[2], pid->C[3]) + valuemul(pid->X[1], pid->C[0]);
