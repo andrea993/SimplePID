@@ -1,6 +1,9 @@
 # FixedPID
 
-This is a powerfull [PID controller](https://en.wikipedia.org/wiki/PID_controller) able to run without floating point unit, using integer arithmetic only.
+This is a powerfull [PID controller](https://en.wikipedia.org/wiki/PID_controller) able to run without floating point unit, using integer arithmetic only
+
+## Schematics
+   <img src="diagram.jpg" width="1000">
 
 ## Configuration
 This PID use the engineering configuration where all parameter are function of `Kp` this is cheap because when you find a stable configuration changin `Kp` allows you to speed up and down the process. Other parameters are time constant, of the PID actions.
