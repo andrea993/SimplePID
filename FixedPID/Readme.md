@@ -51,7 +51,8 @@ This function will be called from PID when it need input, so you can map the por
 - U[0] PI input (typical value: error = reference - process_output)
 - U[1] Antiwindup signal input (typical value: `wo`)
 - U[2] Derivative input (typical value: process_output)
- `arg` is an arbitrary pointer to a resource that the PID will passes to the function.
+
+ `arg` is an arbitrary pointer to a resource that the PID will pass to the function.
  
  To make a PID step you shold call the function `pidStep()`
 ```
