@@ -20,7 +20,9 @@ This PID use the engineering configuration where all parameter are function of `
 |   Ulim[0] 	|       Min output           	|          -   	        |Min process input|
 |   Ulim[1] 	|       Max output           	|          -   	        |Max process input|
 
-You can also set `realDerivative`, a boolean to choose if you want to read input from a derivative sensor instead of extimate the derivative numerically. If you have a derivative sensor you can improve a lot the working. If you are using `realDerivative` you should map the sensor output at D input, in this configuration you will have a contribute of you derivative sensor with a gain of Kp*Td.  
+You can also set `realDerivative`, a boolean to choose if you want to read input from a derivative sensor instead of extimate the derivative numerically. If you have a derivative sensor you can improve a lot the working. If you are using `realDerivative` you should map the sensor output at D input, in this configuration you will have a contribute of you derivative sensor with a gain of Kp*Td.
+
+You have also to set the `finput` function, it allow you to choose the PID port mapping, the PID will call this function to get new input, see later.
 
 ### Inputs
 This PID has 3 inputs:
@@ -44,27 +46,46 @@ mypars.Tn = 1e-3f;
 mypars.Ulim[0] = -1;
 mypars.Ulim[1] = 1;
 mypars.realDerivative = false;
+mypars.finput = loopInput;
 	
 pidInit(&mypid, &mypars);
 ```
-Input parameters are in `float` don't worry it converts in `int32_t` during initialization.
+Input parameters are in `float`, don't worry, it converts in `int32_t` during initialization.
 
-To run the pid write a function to manage pid inputs like the following:
+The `finput` function must have the following form:
 ```
 void loopInput(int32_t U[3], int32_t wo, void* arg) { ... }
 ```
-This function will be called from PID when it need input, so you can map the ports inside, to do this edit the U array:
+This function will be called from PID when it need new input, so you can map the ports inside, to do this edit the U array:
 - U[0] PI input (typical value: error = reference - process_output)
 - U[1] Antiwindup signal input (typical value: `wo`)
 - U[2] Derivative input (typical value: process_output)
 
  `arg` is an arbitrary pointer to a resource that the PID will pass to the function.
  
+ This is a `finput` example:
+	void loopInput(int32_t U[3], int32_t wo, void* arg)
+	{
+		args_s *x = (args_s*)arg;
+		int32_t Ref = x->ref; //PID reference 
+
+		int32_t Py = ReadSensor(); // Read process output and use it to make PI feedback
+
+		U[0] = Ref - Py; // Make PI feedback
+		U[1] = wo; // Manage anti-windup
+		U[2] = Py; // Use process output as derivative input
+	}
+ 
  To make a PID step you shold call the function `pidStep()`
 ```
-u = pidStep(&mypid, loopInput, &arg);
+while(!end)
+{
+	u = pidStep(&mypid, &arg);
+	SetProcessInput(u);
+	end = checkEnd();
+}
 ```
-It returns the PID output, that will be the process input, in typical usecase.
+`pidStep()` returns the PID output, that will be the process input, in typical usecase.
 
 
 
