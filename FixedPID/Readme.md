@@ -20,6 +20,8 @@ This PID use the engineering configuration where all parameter are function of `
 |   Ulim[0] 	|       Min output           	|          -   	        |Min process input|
 |   Ulim[1] 	|       Max output           	|          -   	        |Max process input|
 
+You can also set `realDerivative`, a boolean to choose if you want to read input from a derivative sensor instead of extimate the derivative numerically. If you have a derivative sensor you can improve a lot the working. If you are using `realDerivative` you should map the sensor output at D input, in this configuration you will have a contribute of you derivative sensor with a gain of Kp*Td.  
+
 ### Inputs
 This PID has 3 inputs:
 - PI input
@@ -41,6 +43,7 @@ mypars.Tw = mypars.Ti / 5;
 mypars.Tn = 1e-3f;
 mypars.Ulim[0] = -1;
 mypars.Ulim[1] = 1;
+mypars.realDerivative = false;
 	
 pidInit(&mypid, &mypars);
 ```
