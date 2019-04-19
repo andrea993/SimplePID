@@ -22,6 +22,7 @@ typedef struct _InitParameters
 	float Tn;
 	float Tw;
 	float Ulim[2];
+	bool realDerivative;
 }InitParameters;
 
 void pidInit(PID* pid, const InitParameters* p);

@@ -47,6 +47,7 @@ int main()
 	mypars.Tn = 1e-3f;
 	mypars.Ulim[0] = -1;
 	mypars.Ulim[1] = 1;
+	mypars.realDerivative = false;
 	
 	pidInit(&mypid, &mypars);
 
@@ -69,14 +70,22 @@ void pidInit(PID* pid, const InitParameters* p)
 {
 	float Ltn = expf(-p->T / p->Tn);
 	float Kn = -p->Kp / p->Tn;
-	int32_t scale = 1 << N_BIT_FRACT;
 
 	pid->C[0] = float2value(Ltn);
 	pid->C[1] = float2value(p->Kp*p->T/p->Ti);
 	pid->C[2] = float2value(p->T/p->Tw);
-	pid->C[3] = float2value(Kn*p->Td*(Ltn - 1));
 	pid->C[4] = float2value(p->Kp);
-	pid->C[5] = float2value(Kn*p->Td);
+
+	if (p->realDerivative)
+	{
+		pid->C[3] = 0;
+		pid->C[5] = float2value(p->Td);
+	}
+	else
+	{
+		pid->C[3] = float2value(Kn*p->Td*(Ltn - 1));
+		pid->C[5] = float2value(Kn*p->Td);
+	}
 
 	pid->Ulim[0] = float2value(p->Ulim[0]);
 	pid->Ulim[1] = float2value(p->Ulim[1]);
@@ -109,9 +118,3 @@ int32_t pidStep(PID* pid, void (*finput)(int32_t U[3], int32_t wo ,void* arg), v
 	return Y;
 }
 
-
-
-
-
-
-		
