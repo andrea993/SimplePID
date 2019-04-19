@@ -64,18 +64,19 @@ This function will be called from PID when it need new input, so you can map the
  `arg` is an arbitrary pointer to a resource that the PID will pass to the function.
  
  This is a `finput` example:
-	void loopInput(int32_t U[3], int32_t wo, void* arg)
-	{
-		args_s *x = (args_s*)arg;
-		int32_t Ref = x->ref; //PID reference 
+ ```
+void loopInput(int32_t U[3], int32_t wo, void* arg)
+{
+	args_s *x = (args_s*)arg;
+	int32_t Ref = x->ref; //PID reference 
 
-		int32_t Py = ReadSensor(); // Read process output and use it to make PI feedback
+	int32_t Py = ReadSensor(); // Read process output and use it to make PI feedback
 
-		U[0] = Ref - Py; // Make PI feedback
-		U[1] = wo; // Manage anti-windup
-		U[2] = Py; // Use process output as derivative input
-	}
- 
+	U[0] = Ref - Py; // Make PI feedback
+	U[1] = wo; // Manage anti-windup
+	U[2] = Py; // Use process output as derivative input
+}
+ ```
  To make a PID step you shold call the function `pidStep()`
 ```
 while(!end)
