@@ -29,7 +29,7 @@ This PID has 3 inputs:
 User can change the ports mapping however I suggest you to leave D input connected to process output, in order to avoid peaks when reference changing. Btw you can connect D to error like simplest PIDs.
 
 ## Usage
-Declare a `PID` struct and a `InitParameters` struct, for example and call `pidInit()`
+Declare a `PID` structure and a `InitParameters` structure and call `pidInit()`
 ```
 PID mypid;
 InitParameters mypars;
